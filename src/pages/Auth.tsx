@@ -17,38 +17,53 @@ const Auth = () => {
     setIsLoading(true);
     
     const formData = new FormData(e.currentTarget);
-    const email = formData.get("email") as string;
+    const username = formData.get("username") as string;
     const password = formData.get("password") as string;
 
-    // TODO: Implement Lovable Cloud authentication
-    setTimeout(() => {
+    try {
+      // Call your PHP backend
+      const response = await fetch('YOUR_PHP_BACKEND_URL/login.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          username: username,
+          password: password,
+        }),
+        credentials: 'include', // Important for PHP sessions
+      });
+
+      if (response.ok) {
+        // Check if login was successful
+        const text = await response.text();
+        
+        // If PHP redirects or returns success
+        if (response.redirected || text.includes('authenticated')) {
+          localStorage.setItem('authenticated', 'true');
+          localStorage.setItem('username', username);
+          toast.success("Login successful!");
+          navigate("/dashboard");
+        } else {
+          toast.error("Invalid username or password");
+        }
+      } else {
+        toast.error("Login failed. Please try again.");
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      toast.error("Connection error. Please check your server.");
+    } finally {
       setIsLoading(false);
-      toast.success("Login successful!");
-      navigate("/dashboard");
-    }, 1000);
+    }
   };
 
   const handleSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
     
-    const formData = new FormData(e.currentTarget);
-    const email = formData.get("email") as string;
-    const password = formData.get("password") as string;
-    const confirmPassword = formData.get("confirmPassword") as string;
-
-    if (password !== confirmPassword) {
-      toast.error("Passwords do not match");
-      setIsLoading(false);
-      return;
-    }
-
-    // TODO: Implement Lovable Cloud authentication
-    setTimeout(() => {
-      setIsLoading(false);
-      toast.success("Account created successfully!");
-      navigate("/dashboard");
-    }, 1000);
+    toast.info("Signup not yet implemented. Please contact administrator.");
+    setIsLoading(false);
   };
 
   return (
@@ -73,12 +88,12 @@ const Auth = () => {
             <TabsContent value="login">
               <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="login-email">Email</Label>
+                  <Label htmlFor="login-username">Username</Label>
                   <Input
-                    id="login-email"
-                    name="email"
-                    type="email"
-                    placeholder="your.email@example.com"
+                    id="login-username"
+                    name="username"
+                    type="text"
+                    placeholder="Enter your username"
                     required
                   />
                 </div>
