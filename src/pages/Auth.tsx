@@ -67,22 +67,30 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 p-4">
-      <Card className="w-full max-w-md shadow-strong">
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden bg-gradient-to-br from-primary/10 via-secondary/10 to-accent/10 p-4">
+      {/* Animated background blobs */}
+      <div className="absolute top-20 -left-20 w-72 h-72 bg-primary/20 rounded-full blur-3xl animate-pulse-glow"></div>
+      <div className="absolute bottom-20 -right-20 w-72 h-72 bg-secondary/20 rounded-full blur-3xl animate-pulse-glow" style={{ animationDelay: '1s' }}></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '2s' }}></div>
+      
+      <Card className="w-full max-w-md shadow-strong backdrop-blur-sm bg-card/95 border-2 hover-lift animate-fade-in-up relative z-10">
         <CardHeader className="text-center space-y-4">
-          <div className="flex justify-center">
-            <img src={universityLogo} alt="University Logo" className="h-20 w-20 object-contain" />
+          <div className="flex justify-center animate-float">
+            <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-r from-primary via-secondary to-accent rounded-full blur-xl opacity-50"></div>
+              <img src={universityLogo} alt="University Logo" className="h-24 w-24 object-contain relative z-10 drop-shadow-2xl" />
+            </div>
           </div>
-          <div>
-            <CardTitle className="text-2xl">University of Baguio</CardTitle>
-            <CardDescription>Schedule Management System</CardDescription>
+          <div className="space-y-2">
+            <CardTitle className="text-3xl font-display font-bold gradient-text">University of Baguio</CardTitle>
+            <CardDescription className="text-base font-medium">Schedule Management System</CardDescription>
           </div>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="login" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="login">Login</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
+            <TabsList className="grid w-full grid-cols-2 bg-muted/50 p-1">
+              <TabsTrigger value="login" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-primary/80 data-[state=active]:text-primary-foreground transition-all">Login</TabsTrigger>
+              <TabsTrigger value="signup" className="data-[state=active]:bg-gradient-to-r data-[state=active]:from-secondary data-[state=active]:to-secondary/80 data-[state=active]:text-secondary-foreground transition-all">Sign Up</TabsTrigger>
             </TabsList>
             
             <TabsContent value="login">
@@ -107,7 +115,7 @@ const Auth = () => {
                     required
                   />
                 </div>
-                <Button type="submit" className="w-full" disabled={isLoading}>
+                <Button type="submit" className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 shadow-lg hover:shadow-xl transition-all font-semibold" disabled={isLoading}>
                   {isLoading ? "Logging in..." : "Log In"}
                 </Button>
               </form>
